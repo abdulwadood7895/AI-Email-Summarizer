@@ -1,0 +1,144 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "labelIds": [
+            "INBOX"
+          ],
+          "q": "is:unread -to:wadoodkhan205262@gmail.com -subject:\"AI Email Summary"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "cdbeeb68-6afe-49f5-818d-c0a0270835f8",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "6nxbmmVDfvi9N580",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Summarize the following email.\n\nFormat exactly like this:\n\nSUMMARY\n- point 1\n- point 2\n- point 3\n\nACTION ITEMS\n- action 1\n- action 2\n- action 3\n\nEMAIL:\n{{ $json.snippet }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "9f33cb42-3c36-41de-8630-5442cf777d6d",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        80
+      ],
+      "id": "5a8a3815-2c9d-4bee-9104-7a85691a4759",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "p1s2WY4LwLYPJj2T",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "wadoodkhan205262@gmail.com",
+        "subject": "AI Email Summary",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "d7273d41-e304-4265-ade2-34481e44672d",
+      "name": "Send a message",
+      "webhookId": "30ad8370-2335-4444-906d-ce35bb97d852",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "6nxbmmVDfvi9N580",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "3c48bd23-1e84-49fe-888a-2a3834e10eff",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0303e156597aea344531640c1ce09deb7019e17db15018e01e4e6bc0d4c011b2"
+  },
+  "nodeGroups": [],
+  "id": "0c8XIy2UJZFtp7mP",
+  "tags": []
+}
