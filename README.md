@@ -39,3 +39,13 @@ Summary Email Screenshot:
 Author
 
 Abdul Wadood
+## Screenshots
+
+### Workflow
+![Workflow](workflow.png)
+
+### AI Agent Prompt
+![AI Agent Prompt](ai-agent-prompt.png)
+
+### Summary Email Output
+![Summary Email](summary-email.jpeg)
